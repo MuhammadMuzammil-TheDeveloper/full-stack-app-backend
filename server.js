@@ -7,7 +7,7 @@ import todoRoute from './routes/todo.js'
 dotenv.config()
 const app = express()
 
-const PORT = process.env.PORT || 5000
+// const PORT = process.env.PORT || 5000
 
 // Body parser
 app.use(express.json())
@@ -17,6 +17,7 @@ app.use(cors({}))
 
 //mongoDb connect
 const URI = process.env.MONGODB_URI
+console.log('URI', URI)
 mongoose
   .connect(URI)
   .then(res => console.log('MONGODB CONNECTED!'))
@@ -35,8 +36,13 @@ app.get('/health', (request, response) => {
 app.use('/api/auth', authRoute)
 app.use('/api/todo', todoRoute)
 
-
-
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const port = process.env.PORT || 3000
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
+  })
+}
 
 // app.listen(PORT, () => console.log(`server runnng on http://localhost:${PORT}`))
 
